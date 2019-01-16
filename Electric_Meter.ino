@@ -13,11 +13,11 @@ EthernetServer server(80); //Standart HTTP Port
 #define empf2 100
 
 #define smoothing 16
-#define turnsperkwh 73
+#define turnsperkwh 73.00
 
-int whperturn = 1/turnsperkwh*1000;
-int turnstarttime;
-int currentw;
+float whperturn = (1.00/turnsperkwh)*1000.00;
+long turnstarttime;
+float currentw;
 
 int standart1, standart2;
 
@@ -25,7 +25,7 @@ int s1afiltered, s2afiltered;
 
 bool s1, s2, lasts1, lasts2;
 
-int time1, time2, time1start, time2start;
+float time1, time2, time1start, time2start;
 bool time1started, time2started, time1set, time2set;
 
 int count = 0;
@@ -38,7 +38,7 @@ void setup() {
   server.begin();
   Serial.print("Server ist Online, IP:");
   Serial.println(Ethernet.localIP());
-  
+
   standart1 = analogRead(s1a);
   standart2 = analogRead(s2a);
   lasts1 = analogRead(s1a) - standart1 > empf1;
@@ -47,7 +47,7 @@ void setup() {
 
 void loop() {
   updatesensors();
-  
+
   EthernetClient client = server.available();
 
   if (client) {
@@ -59,19 +59,19 @@ void loop() {
         if (c == '\n' && currentLineIsBlank) {
           client.println("HTTP/1.1 200 OK");
           client.println("Content-Type: text/html");
-          client.println("Connection: close"); 
+          client.println("Connection: close");
           client.println("Refresh: 5");
           client.println();
           client.println("<!DOCTYPE HTML>");
           client.println("<html>");
           client.print("Aktuelle Leistung: ");
           client.print(currentw);
-          client.print(" || Umdrehungen seit Start: ");
+          client.print(" W || Umdrehungen seit Start: ");
           client.print(count);
           client.println("</html>");
           break;
         }
-        
+
         if (c == '\n') {
           currentLineIsBlank = true;
         } else if (c != '\r') {
@@ -92,7 +92,7 @@ void updatesensors() {
   }
   s1afiltered = s1afiltered / smoothing;
   s2afiltered = s2afiltered / smoothing;
-  
+
   s1 = s1afiltered - standart1 > empf1;
   s2 = s2afiltered - standart2 > empf2;
 
@@ -111,25 +111,25 @@ void updatesensors() {
       startt1();
     } else if (time2started && time1set) {
       stopt2();
-      
+
       time1set = false;
       time2set = false;
       time1started = false;
       time2started = false;
-      
+
       if (time1 < time2) {
         count--;
       } else {
         count++;
       }
-      
+
       startt1();
-      
+
       if(turnstarttime != 0) {
-        currentw = whperturn/((millis()-turnstarttime)/3600000);
+        currentw = (float)whperturn/(((float)millis()-(float)turnstarttime)/3600000.00);
       }
-      
-      turnstarttime = millis();
+
+      turnstarttime = (float)millis();
     }
   }
   if (s2 && !lasts2) {
@@ -138,7 +138,7 @@ void updatesensors() {
       stopt1();
     }
   }
-  
+
 
   lasts1 = s1;
   lasts2 = s2;
