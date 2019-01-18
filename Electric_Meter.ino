@@ -1,4 +1,4 @@
-default#include <SPI.h>
+#include <SPI.h>
 #include <Ethernet.h>
 
 byte mac[] = {0x00, 0xAA, 0xBB, 0xCC, 0xDA, 0x02}; //Your Arduino MAC Adress
