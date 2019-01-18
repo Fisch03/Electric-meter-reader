@@ -1,4 +1,4 @@
-Arduino Electric Meter Reader
+Electric Meter Reader
 ===
 
 A simple Arduino Program, which reads Electric meters using 2 tracking Sensors.
