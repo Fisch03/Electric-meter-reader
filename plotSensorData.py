@@ -12,6 +12,7 @@ import matplotlib.style as style
 s = serial.Serial(port='/dev/ttyACM0', baudrate=9600, timeout=61) #Put your Arduino Port here
 
 currentw = 0.0
+lastw = 0.0
 
 try:
     s.open() #Open Serial Connection
@@ -31,15 +32,15 @@ time.sleep(10)
 
 def animate(i, xs, ys):
     if(currentw != 0):
-        print("["+ dt.datetime.now().strftime('%X') + "] " + str(currentw) + " Watt") #Print out the Data
-        xs.append(dt.datetime.now().strftime('%X')) #Append a Timestamp to the X Axis
-        ys.append(currentw) #Append it to the y Axis
+        if(currentw != lastw):
+            global lastw
+
+            print("["+ dt.datetime.now().strftime('%X') + "] " + str(currentw) + " Watt") #Print out the Data
+            xs.append(dt.datetime.now()) #Append a Timestamp to the X Axis
+            ys.append(currentw) #Append it to the y Axis
+            lastw = currentw
     else:
         print("["+ dt.datetime.now().strftime('%X') +"] Data is still calculating, skipping")
-
-    #Limit the Axis to 60 entries
-    xs = xs[-60:]
-    ys = ys[-60:]
 
     ax.clear()
     ax.plot(xs, ys)
@@ -52,7 +53,7 @@ def animate(i, xs, ys):
     plt.xlabel("Time")
 
 try:
-    ani = animation.FuncAnimation(fig, animate, fargs=(xs, ys), interval=60000) #Update plot every Minute
+    ani = animation.FuncAnimation(fig, animate, fargs=(xs, ys), interval=1000) #Change Update Speed here (in ms)
     plt.show(0)
     while True:
         try:
