@@ -10,7 +10,6 @@ Installation
 **You will need:**
 - Arduino Mega / Due
 - 2x Tracking Sensor
-- Breadboard
 
 **For the Webinterface:**
 - Ethernet Cable with working Connection
