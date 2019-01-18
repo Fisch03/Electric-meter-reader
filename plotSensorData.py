@@ -54,6 +54,8 @@ def animate(i, xs, ys):
 
 try:
     ani = animation.FuncAnimation(fig, animate, fargs=(xs, ys), interval=1000) #Change Update Speed here (in ms)
+    mng = plt.get_current_fig_manager()
+    mng.full_screen_toggle() #Put the window in Fullscreen Mode
     plt.show(0)
     while True:
         try:

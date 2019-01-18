@@ -42,7 +42,7 @@ Now Plug in your Arduino and issue the Command again. There should be a new entr
 
 ### Notes
 - The Meter has to do at least 1 Full turn to calculate the usage. Before that, the usage will show up as 0. This has to do with the way the Calculating is done, and there is no Fix for that.
-- To exit the Python Script, close down the Plot Window, then hit Ctrl + C in the Terminal.
+- To exit the Python Script, close down the Plot Window (Alt + F4), then hit Ctrl + C in the Terminal.
 - Starting the Script may reset the Arduino because a new Serial connection is made. If this happens, you will lose all Prerecorded Turns.
 - If you want to have a visual Indicator for the Disc on your electric Meter, you can Connect two LEDs to the Arduino Outputs you specified in the Electric_Meter.ino File (Default: 2 & 3). These will light up if the Sensors detect the Color on the Disk.
 
