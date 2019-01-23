@@ -1,6 +1,8 @@
 Electric Meter Reader
 ===
 
+[![License](https://img.shields.io/github/license/Fisch03/Electric-meter-reader.svg)](https://github.com/Fisch03/Electric-meter-reader/blob/master/LICENSE)
+
 A simple Arduino Program, which reads Electric meters using 2 tracking Sensors.
 You can retrieve the Data either by using a Webinterface, provided by the Arduino Ethernet Shield, a Raspberry PI running a Python Script, which Plots the past usage or by using [Emoncms](https://emoncms.org/), a free web app for data visualization.
 
