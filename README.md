@@ -51,7 +51,7 @@ If your Raspberry Pi has constant access to the Internet, you can also send your
 ```
 sudo python -m pip install -U requests
 ```
-Log into your Emoncms Account or create a new one. Go to Settings > API and copy your Read & Write key into the "secretsexample.py" File. **Do not share this key as it will grant Full access to your Emoncms Account** Change the Name of the File into "secrets.py". If you run the Script, you should find the Outputs of your Meter in Emoncms under Settings > Inputs. Configuring a Dashboard is beyond the Scope of this Tutorial, but I recommend you [**this**](https://powerforum.co.za/topic/1245-emoncms-startup-tutorial/) Site to get started.
+Log into your Emoncms Account or create a new one. Go to Setup > API and copy your Read & Write key into the "secretsexample.py" File. **Do not share this key as it will grant Full access to your Emoncms Account** Change the Name of the File into "secrets.py". If you run the Script, you should find the Outputs of your Meter in Emoncms under Setup > Inputs. Configuring a Dashboard is beyond the Scope of this Tutorial, but I recommend you [this](https://powerforum.co.za/topic/1245-emoncms-startup-tutorial/) Site to get started.
 
 
 ### Notes
@@ -63,4 +63,5 @@ Log into your Emoncms Account or create a new one. Go to Settings > API and copy
 ### Troubleshooting
 - The Arduino samples a default Value when started. If the Color on the Disk is in front of it while doing so, the Arduino might fail to read the Electric Meter. Try resetting it by Pressing its reset Button when the Color is **not** in front of it.
 - Depending on the Room you install the System in, there may be too much Noise. You can tweak the sens1 and sens2 values in the Electric_Meter.ino File, to counteract this.
-- If you notice a lot of Noise in the Sensor readings, try Increasing the "smoothing" constant in the Electric_Meter.ino File. Try to keep this Value as low as possible, because it will slow down the Frequency of Reading.
+- If you notice a lot of Noise in the Sensor readings, try Increasing the "smoothing" constant in the Electric_Meter.ino File. Try to keep this Value as low as possible, because it will slow down the response Time of your Arduino.
+- The Python Script has a maximum Value to prevent Serial Communication Errors. If your Power usage exceeds 7500 Watts, you should change it to something higher.

@@ -9,17 +9,18 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib.style as style
 
+import requests
+
+from secrets import emoncmskey
+
 s = serial.Serial(port='/dev/ttyACM0', baudrate=9600) #Put your Arduino Port here
 
 MeterNumber = 2
-EmoncmsUsage = False
-
-if (EmoncmsUsage):
-    from secrets import emoncmskey
-    import requests
+EmoncmsUsage = True
 
 currentw = [0.00, 0.00]
 lastw = [0.00, 0.00]
+datachange = False
 
 try:
     s.open() #Open Serial Connection
@@ -43,13 +44,17 @@ def animate(i, xs, ys):
     ax.clear()
     for s in range(MeterNumber):
         if(currentw[s] != 0):
+            global datachange
             if(currentw[s] != lastw[s]):
+                datachange = True
                 global lastw
                 xs[s].append(dt.datetime.now()) #Append a Timestamp to the X Axis
 
                 print("["+ dt.datetime.now().strftime('%X') + "] " + str(currentw[s]) + " Watt") #Print out the Data
                 ys[s].append(currentw[s]) #Append it to the y Axis
                 lastw[s] = currentw[s]
+            else:
+                datachange = False
         else:
             print("["+ dt.datetime.now().strftime('%X') +"] Data is still calculating, skipping")
 
@@ -63,7 +68,7 @@ def animate(i, xs, ys):
     plt.ylabel("Watt")
     plt.xlabel("Time")
 
-    if(EmoncmsUsage):
+    if(EmoncmsUsage and datachange):
         sensorjson = "{"
         for sens in range(MeterNumber-1):
             sensorjson += '"Meter' + str(sens) + '":' + str(currentw[sens]) + ', '
@@ -81,7 +86,8 @@ try:
             serdata = s.readline() #Read the new Serial Data
             serdata = serdata.split("|")
             for w in range(len(serdata)-1):
-                currentw[w] = float(serdata[w])
+                if (float(serdata[w]) < 7500):
+                    currentw[w] = float(serdata[w])
 
             plt.pause(0.0001) #Pause the Plot to let the Program execute
         except ValueError:
